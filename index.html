@@ -3,85 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makale-i Tarih | Tarihin Derinliklerine Yolculuk</title>
-    <!-- Tailwind CSS -->
+    <title>Makale-i Tarih | Tarihin Derinlikleri</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --history-gold: #c5a059;
-            --history-dark: #1a1a1a;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f5f0;
-        }
-        .serif {
-            font-family: 'Crimson Pro', serif;
-        }
-        .auth-card {
-            display: none;
-        }
-        .auth-card.active {
-            display: block;
-        }
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(255,255,255,0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #c5a059;
-            border-radius: 10px;
-        }
-        #notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: none;
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .modal-active {
-            overflow: hidden;
-        }
+        :root { --history-gold: #c5a059; --history-dark: #1a1a1a; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f5f0; top: 0px !important; }
+        .serif { font-family: 'Crimson Pro', serif; }
+        .auth-card { display: none; }
+        .auth-card.active { display: block; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #c5a059; border-radius: 10px; }
+        #notification { position: fixed; top: 20px; right: 20px; z-index: 1000; display: none; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        /* Google Translate UI Gizleme */
+        .goog-te-banner-frame.skiptranslate { display: none !important; } 
+        #google_translate_element { display: none; }
+        .skiptranslate iframe { display: none !important; }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Bildirim Kutusu -->
-    <div id="notification" class="bg-green-600 text-white px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center space-x-2">
+    <div id="notification" class="bg-amber-700 text-white px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center space-x-2">
         <i class="fa-solid fa-circle-check"></i>
         <span id="notif-text">İşlem Başarılı!</span>
     </div>
 
-    <!-- Loading Overlay -->
-    <div id="loading" class="loading-overlay">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-amber-700"></div>
-    </div>
+    <div id="google_translate_element"></div>
 
-    <!-- Header / Navbar -->
-    <nav class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center space-x-2 cursor-pointer" onclick="window.location.reload()">
                     <i class="fa-solid fa-scroll text-3xl text-amber-700"></i>
-                    <span id="nav-title" class="serif text-2xl font-bold tracking-tighter text-gray-900 uppercase">MAKALE-İ TARİH</span>
+                    <span class="serif text-2xl font-bold tracking-tighter text-gray-900 uppercase">MAKALE-İ TARİH</span>
                 </div>
 
                 <div class="hidden lg:flex items-center space-x-6 text-sm font-semibold text-gray-600">
@@ -91,194 +48,185 @@
                     <button onclick="filterCategory('Modern')" class="hover:text-amber-700 transition">Modern</button>
                 </div>
 
-                <div class="flex items-center space-x-4 md:space-x-8">
-                    <div class="relative group">
-                        <button class="flex items-center space-x-1 hover:text-amber-700 transition">
-                            <i class="fa-solid fa-globe"></i>
-                            <span id="current-lang">Türkçe</span>
-                        </button>
-                        <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 max-h-64 overflow-y-auto custom-scrollbar z-[60]">
-                            <ul class="py-2 text-sm text-gray-700">
-                                <li><button onclick="changeLanguage('tr')" class="w-full text-left px-4 py-2 hover:bg-amber-50">Türkçe</button></li>
-                                <li><button onclick="changeLanguage('en')" class="w-full text-left px-4 py-2 hover:bg-amber-50">English dil değiştirme üstünde çalışıyoruz</button></li>
-                            </ul>
-                        </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center bg-stone-100 rounded-full px-3 py-1 border border-stone-200">
+                        <i class="fa-solid fa-globe text-amber-700 mr-2 text-xs"></i>
+                        <select onchange="changeLanguage(this.value)" class="bg-transparent text-[10px] font-bold outline-none cursor-pointer uppercase">
+                            <option value="tr">TR</option>
+                            <option value="en">EN</option>
+                            <option value="de">DE</option>
+                            <option value="fr">FR</option>
+                        </select>
                     </div>
 
-                    <div id="nav-guest" class="flex items-center space-x-2 md:space-x-4">
+                    <div id="nav-guest" class="flex items-center space-x-2">
                         <button onclick="showAuth('login')" class="px-3 py-2 text-sm font-semibold hover:text-amber-700 transition">Giriş</button>
-                        <button onclick="showAuth('register')" class="px-4 py-2 bg-amber-700 text-white rounded-full text-sm font-semibold hover:bg-amber-800 transition">Kayıt Ol</button>
+                        <button onclick="showAuth('register')" class="px-5 py-2 bg-amber-700 text-white rounded-full text-sm font-bold hover:bg-amber-800 shadow-md transition">Kayıt</button>
                     </div>
 
                     <div id="nav-user" class="hidden flex items-center space-x-4">
-                        <button onclick="showPublishModal()" class="flex items-center space-x-2 text-amber-700 font-bold hover:text-amber-800">
-                            <i class="fa-solid fa-pen-nib"></i>
-                            <span class="hidden sm:inline">Makale Yaz</span>
-                        </button>
-                        <div onclick="showProfileModal()" class="h-9 w-9 bg-amber-100 rounded-full flex items-center justify-center text-amber-800 font-bold border border-amber-200 cursor-pointer hover:bg-amber-200" id="user-avatar">?</div>
-                        <button onclick="logout()" class="text-gray-500 hover:text-red-600 transition"><i class="fa-solid fa-right-from-bracket"></i></button>
+                        <button onclick="showPublishModal()" class="w-10 h-10 flex items-center justify-center text-amber-700 bg-amber-50 rounded-full hover:bg-amber-100 transition"><i class="fa-solid fa-pen-nib"></i></button>
+                        <div onclick="showProfileModal()" id="user-avatar" class="h-10 w-10 rounded-full flex items-center justify-center text-white font-bold cursor-pointer hover:ring-2 ring-amber-500 transition shadow-inner bg-amber-700 uppercase">?</div>
+                        <button onclick="logout()" class="text-gray-400 hover:text-red-600 transition"><i class="fa-solid fa-right-from-bracket"></i></button>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative bg-stone-900 text-white py-16 md:py-24 overflow-hidden">
-        <div class="absolute inset-0 opacity-30 pointer-events-none">
-            <img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&q=80&w=2000" alt="Arka Plan" class="w-full h-full object-cover">
-        </div>
+    <header class="relative bg-stone-900 text-white py-24 overflow-hidden">
+        <div class="absolute inset-0 opacity-20 pointer-events-none"><img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover"></div>
         <div class="max-w-4xl mx-auto text-center px-4 relative z-10">
-            <h1 id="hero-title" class="serif text-4xl md:text-6xl font-bold mb-6">Geçmişin Işığında Geleceği İnşa Edin</h1>
-            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
-                <input type="text" id="search-input" placeholder="Tarihte ara..." class="w-full max-w-md px-6 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
-                <button onclick="handleSearch()" class="bg-amber-600 px-10 py-4 rounded-full font-bold hover:bg-amber-700 shadow-lg transition">Ara</button>
+            <h1 class="serif text-5xl md:text-7xl font-bold mb-6 italic leading-tight">Tarih, Geleceğin En Parlak Işığıdır.</h1>
+            <div class="flex bg-white/10 backdrop-blur-lg rounded-full p-2 max-w-xl mx-auto border border-white/20 shadow-2xl">
+                <input type="text" id="search-input" placeholder="Arşivlerde bir yolculuğa çık..." class="flex-1 bg-transparent px-6 outline-none text-white placeholder:text-stone-400 font-medium">
+                <button onclick="handleSearch()" class="bg-amber-600 px-8 py-3 rounded-full font-bold hover:bg-amber-700 transition shadow-lg">Ara</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-12 flex flex-col md:flex-row gap-8">
-        <section class="flex-1 space-y-8" id="articles-container">
-            <!-- Loading placeholder -->
-            <div class="animate-pulse space-y-4">
-                <div class="h-48 bg-gray-200 rounded-2xl w-full"></div>
-                <div class="h-48 bg-gray-200 rounded-2xl w-full"></div>
-            </div>
-        </section>
+    <main class="max-w-7xl mx-auto px-4 py-16 flex flex-col md:flex-row gap-12">
+        <section class="flex-1 space-y-10" id="articles-container">
+            </section>
 
         <aside class="w-full md:w-80 space-y-8">
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
-                <h3 class="serif text-xl font-bold mb-4 border-b pb-2 text-amber-800">Kategoriler</h3>
-                <ul class="space-y-3">
-                    <li><button onclick="filterCategory('all')" class="w-full text-left text-gray-600 hover:text-amber-700 flex items-center font-bold"> Hepsi</button></li>
-                    <li><button onclick="filterCategory('Antik Çağ')" class="w-full text-left text-gray-600 hover:text-amber-700 flex items-center"><i class="fa-solid fa-landmark text-xs mr-2"></i> Antik Çağ</button></li>
-                    <li><button onclick="filterCategory('Orta Çağ')" class="w-full text-left text-gray-600 hover:text-amber-700 flex items-center"><i class="fa-solid fa-chess-rook text-xs mr-2"></i> Orta Çağ</button></li>
-                    <li><button onclick="filterCategory('Osmanlı')" class="w-full text-left text-gray-600 hover:text-amber-700 flex items-center"><i class="fa-solid fa-moon text-xs mr-2"></i> Osmanlı</button></li>
-                    <li><button onclick="filterCategory('Modern')" class="w-full text-left text-gray-600 hover:text-amber-700 flex items-center"><i class="fa-solid fa-clock text-xs mr-2"></i> Modern</button></li>
-                </ul>
-            </div>
-            <!-- Ekstra Bilgi Paneli -->
-            <div class="bg-amber-700 rounded-2xl p-6 text-white shadow-lg">
-                <h3 class="serif text-lg font-bold mb-2">Günün Sözü</h3>
-                <p class="text-sm italic opacity-90">"Tarihini bilmeyen bir millet, köksüz bir ağaca benzer; fırtınada yıkılması kaçınılmazdır."</p>
+            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-stone-100 sticky top-28">
+                <h3 class="serif text-2xl font-bold mb-6 text-amber-900 border-b border-stone-100 pb-4">Kategoriler</h3>
+                <div class="space-y-2">
+                    <button onclick="filterCategory('all')" class="w-full flex items-center space-x-4 p-3 rounded-2xl hover:bg-amber-50 transition text-left group">
+                        <span class="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition"><i class="fa-solid fa-border-all text-amber-800"></i></span>
+                        <span class="font-bold text-stone-700">Tüm Arşiv</span>
+                    </button>
+                    <button onclick="filterCategory('Antik Çağ')" class="w-full flex items-center space-x-4 p-3 rounded-2xl hover:bg-amber-50 transition text-left group">
+                        <span class="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition"><i class="fa-solid fa-landmark text-amber-800"></i></span>
+                        <span class="font-bold text-stone-700">Antik Çağ</span>
+                    </button>
+                    <button onclick="filterCategory('Orta Çağ')" class="w-full flex items-center space-x-4 p-3 rounded-2xl hover:bg-amber-50 transition text-left group">
+                        <span class="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition"><i class="fa-solid fa-chess-rook text-amber-800"></i></span>
+                        <span class="font-bold text-stone-700">Orta Çağ</span>
+                    </button>
+                    <button onclick="filterCategory('Osmanlı')" class="w-full flex items-center space-x-4 p-3 rounded-2xl hover:bg-amber-50 transition text-left group">
+                        <span class="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition"><i class="fa-solid fa-moon text-amber-800"></i></span>
+                        <span class="font-bold text-stone-700">Osmanlı</span>
+                    </button>
+                </div>
             </div>
         </aside>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-stone-900 text-stone-400 pt-16 pb-8 border-t-4 border-amber-700">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
-            <div class="space-y-4">
-                <div class="flex items-center justify-center md:justify-start space-x-2 text-white">
-                    <i class="fa-solid fa-scroll text-2xl text-amber-700"></i>
-                    <span class="serif text-2xl font-bold tracking-tight uppercase">MAKALE-İ TARİH</span>
+    <footer class="bg-stone-900 text-stone-400 pt-24 pb-12 border-t-8 border-amber-700">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
+                <div class="col-span-1 md:col-span-2 space-y-8">
+                    <div class="flex items-center space-x-3 text-white">
+                        <i class="fa-solid fa-scroll text-4xl text-amber-600"></i>
+                        <span class="serif text-4xl font-bold tracking-widest uppercase">MAKALE-İ TARİH</span>
+                    </div>
+                    <p class="max-w-md leading-relaxed text-sm italic font-light">"Geçmişini bilmeyen, geleceğine yön veremez." Bizler, tarihin tozlu sayfalarını dijital dünyaya taşıyarak bilginin ölümsüzlüğüne inanıyoruz.</p>
+                    <div class="flex space-x-5">
+                        <a href="#" class="h-12 w-12 rounded-xl border border-stone-800 flex items-center justify-center hover:bg-amber-700 hover:text-white transition shadow-lg"><i class="fa-brands fa-instagram text-xl"></i></a>
+                        <a href="#" class="h-12 w-12 rounded-xl border border-stone-800 flex items-center justify-center hover:bg-amber-700 hover:text-white transition shadow-lg"><i class="fa-brands fa-x-twitter text-xl"></i></a>
+                        <a href="#" class="h-12 w-12 rounded-xl border border-stone-800 flex items-center justify-center hover:bg-amber-700 hover:text-white transition shadow-lg"><i class="fa-brands fa-youtube text-xl"></i></a>
+                    </div>
                 </div>
-                <p class="text-xs">Tarih paylaştıkça aydınlanır. Geçmişin tozlu raflarından bugüne uzanan köprü.</p>
+                <div>
+                    <h4 class="text-white font-bold mb-8 serif text-xl uppercase tracking-widest">Kütüphane</h4>
+                    <ul class="space-y-4 text-sm font-medium">
+                        <li><a href="#" class="hover:text-amber-500 transition flex items-center"><i class="fa-solid fa-chevron-right text-[10px] mr-2 opacity-50"></i> Hakkımızda</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition flex items-center"><i class="fa-solid fa-chevron-right text-[10px] mr-2 opacity-50"></i> Yazarlık Şartları</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition flex items-center"><i class="fa-solid fa-chevron-right text-[10px] mr-2 opacity-50"></i> KVKK & Gizlilik</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-8 serif text-xl uppercase tracking-widest">İletişim</h4>
+                    <p class="text-xs leading-loose">Destek ve işbirliği için:<br>
+                    <span class="text-amber-600 font-bold">destek@makaleitarih.com</span><br>
+                    İstanbul, Türkiye</p>
+                </div>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Kurumsal</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><button onclick="showInfo('vizyon')" class="hover:text-amber-500">Vizyonumuz</button></li>
-                    <li><button onclick="showInfo('yazarlik')" class="hover:text-amber-500">Yazarlık Şartları</button></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Yasal</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><button onclick="showInfo('kvkk')" class="hover:text-amber-500">KVKK Metni</button></li>
-                </ul>
-            </div>
-            <div class="flex flex-col items-center md:items-start justify-center">
-                 <p class="text-stone-500 text-xs mb-2 tracking-[0.2em] uppercase">Powered by <span class="text-amber-600 font-bold">YBG13™</span></p>
-                 <p class="text-[10px]">&copy; 2026 Makale-i Tarih Platformu.</p>
+            <div class="border-t border-stone-800 pt-10 flex flex-col md:row justify-between items-center text-[10px] tracking-[0.3em] uppercase font-bold text-stone-500">
+                <p>&copy; 2026 Makale-i Tarih Platformu.</p>
+                <p class="mt-4 md:mt-0">Design & Code by <span class="text-amber-700">YBG13™</span></p>
             </div>
         </div>
     </footer>
 
-    <!-- Makale Okuma Modalı -->
-    <div id="read-modal" class="fixed inset-0 bg-black/80 z-[200] hidden flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white w-full max-w-4xl rounded-3xl p-6 md:p-12 relative max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <button onclick="closeRead()" class="fixed md:absolute top-4 right-4 bg-stone-100 p-3 rounded-full hover:bg-stone-200 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <div id="read-content-area"></div>
+    <div id="profile-modal" class="fixed inset-0 bg-black/80 z-[200] hidden items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white w-full max-w-md rounded-[3rem] p-10 relative shadow-2xl border border-stone-100">
+            <button onclick="closeProfile()" class="absolute top-8 right-8 text-stone-400 hover:text-black transition"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            <h2 class="serif text-3xl font-bold mb-8 text-center text-stone-900">Yazar Profili</h2>
+            <div class="space-y-8">
+                <div id="prof-avatar-big" class="h-28 w-28 mx-auto rounded-full flex items-center justify-center text-5xl text-white font-bold shadow-2xl border-4 border-stone-50 bg-amber-700 uppercase">?</div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[10px] font-black text-stone-400 uppercase tracking-widest ml-2">Görünür İsim (Yazar Adı)</label>
+                        <input type="text" id="prof-display-name" class="w-full p-4 rounded-2xl bg-stone-50 border border-stone-200 focus:border-amber-500 outline-none font-bold text-stone-700 transition" placeholder="Örn: Tarihçi Yusuf">
+                    </div>
+                    <button onclick="updateProfileData()" class="w-full py-4 bg-amber-700 text-white rounded-2xl font-bold hover:bg-amber-800 shadow-xl transition transform active:scale-95">Değişiklikleri Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="read-modal" class="fixed inset-0 bg-black/90 z-[200] hidden flex items-center justify-center p-4 backdrop-blur-xl">
+        <div class="bg-white w-full max-w-5xl rounded-[3.5rem] p-8 md:p-16 relative max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl">
+            <button onclick="closeRead()" class="fixed md:absolute top-8 right-8 bg-stone-100 p-4 rounded-full hover:bg-stone-200 transition z-50"><i class="fa-solid fa-xmark text-xl"></i></button>
             
-            <div class="mt-12 border-t pt-8">
-                <h3 class="serif text-2xl font-bold mb-6">Yorumlar yorum ekleme üstünde çalışıyoruz teslim 1 mart</h3>
-                <div id="comment-list" class="space-y-4 mb-8 text-sm"></div>
-                <div id="comment-form-area" class="hidden">
-                    <textarea id="comment-input" placeholder="Düşüncelerinizi paylaşın..." class="w-full p-4 rounded-xl bg-stone-50 border border-stone-200 focus:border-amber-500 outline-none resize-none"></textarea>
-                    <button id="submit-comment-btn" class="mt-2 px-8 py-2 bg-amber-700 text-white rounded-full font-bold hover:bg-amber-800 transition">Yorum Yap</button>
+            <div id="read-content-area" class="animate-fade-in"></div>
+            
+            <div class="mt-20 border-t border-stone-100 pt-16">
+                <h3 class="serif text-3xl font-bold mb-10 flex items-center text-stone-900"><i class="fa-solid fa-comments text-amber-700 mr-4"></i> Fikir ve Yorumlar</h3>
+                <div id="comment-list" class="space-y-6 mb-12">
+                    </div>
+                <div id="comment-form-area" class="hidden space-y-4 bg-stone-50 p-8 rounded-[2rem] border border-stone-100">
+                    <textarea id="comment-input" placeholder="Bu tarihi olay hakkındaki görüşünüz nedir?" class="w-full p-6 rounded-2xl bg-white border border-stone-200 focus:border-amber-500 outline-none resize-none h-32 transition font-medium text-stone-700"></textarea>
+                    <div class="flex justify-end"><button onclick="addComment()" class="px-12 py-4 bg-stone-900 text-white rounded-full font-bold hover:bg-amber-700 transition shadow-lg active:scale-95">Yorumu Gönder</button></div>
                 </div>
-                <p id="comment-login-msg" class="text-sm text-stone-500 italic">Yorum yapmak için giriş yapmalısınız.</p>
             </div>
         </div>
     </div>
 
-    <!-- Profil Özelleştirme Modalı -->
-    <div id="profile-modal" class="fixed inset-0 bg-black/60 z-[100] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-3xl p-8 relative">
-            <button onclick="closeProfile()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="serif text-3xl font-bold mb-6 text-center text-stone-800">Profil Ayarları üstünde çalışıyoruz  </h2>
-            <div class="flex flex-col items-center space-y-4">
-                <div id="prof-avatar-preview" class="h-24 w-24 bg-amber-100 rounded-full flex items-center justify-center text-3xl font-bold text-amber-800 border-4 border-amber-200">?</div>
-                <div class="w-full space-y-2">
-                    <label class="text-sm font-semibold text-stone-600">E-Posta Adresiniz:</label>
-                    <input type="text" id="prof-email" disabled class="w-full p-3 rounded-lg bg-stone-100 text-stone-500 border border-stone-200 cursor-not-allowed">
-                </div>
-                <button onclick="logout()" class="w-full py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">Çıkış Yap</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Auth Modal -->
-    <div id="auth-modal" class="fixed inset-0 bg-black/60 z-[100] hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-md rounded-3xl p-8 relative">
-            <button onclick="closeAuth()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <div id="auth-modal" class="fixed inset-0 bg-black/70 z-[300] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 relative shadow-2xl">
+            <button onclick="closeAuth()" class="absolute top-6 right-6 text-stone-400 hover:text-black"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
             <div id="login-card" class="auth-card">
-                <h2 class="serif text-3xl font-bold mb-6 text-center text-stone-900">Giriş Yap</h2>
-                <form id="login-form" class="space-y-4">
-                    <input type="email" id="login-email" placeholder="E-Posta" required class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 outline-none">
-                    <input type="password" id="login-password" placeholder="Şifre" required class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 outline-none">
-                    <button type="submit" class="w-full py-4 bg-amber-700 text-white rounded-xl font-bold hover:bg-amber-800 transition">Giriş Yap</button>
+                <h2 class="serif text-3xl font-bold mb-8 text-center text-stone-900">Tekrar Hoş Geldin</h2>
+                <form id="login-form" class="space-y-5">
+                    <input type="email" id="login-email" placeholder="E-posta Adresi" required class="w-full p-4 rounded-2xl border border-stone-200 outline-none focus:border-amber-600 transition">
+                    <input type="password" id="login-password" placeholder="Şifre" required class="w-full p-4 rounded-2xl border border-stone-200 outline-none focus:border-amber-600 transition">
+                    <button type="submit" class="w-full py-4 bg-amber-700 text-white rounded-2xl font-bold shadow-lg hover:bg-amber-800 transition">Giriş Yap</button>
                 </form>
-                <p class="mt-4 text-center text-sm">Hesabınız yok mu? <button onclick="showAuth('register')" class="text-amber-700 font-bold">Kayıt Ol</button></p>
+                <button onclick="showAuth('register')" class="w-full mt-6 text-xs text-stone-500 font-bold hover:text-amber-700 transition">Hala üye değil misin? Hemen Kayıt Ol</button>
             </div>
+
             <div id="register-card" class="auth-card">
-                <h2 class="serif text-3xl font-bold mb-6 text-center text-stone-900">Kayıt Ol</h2>
-                <form id="register-form" class="space-y-4">
-                    <input type="email" id="reg-email" placeholder="E-Posta" required class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 outline-none">
-                    <input type="password" id="reg-password" placeholder="Şifre (Min 6 Karakter)" required minlength="6" class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 outline-none">
-                    <button type="submit" class="w-full py-4 bg-amber-700 text-white rounded-xl font-bold hover:bg-amber-800 transition">Hesap Oluştur</button>
+                <h2 class="serif text-3xl font-bold mb-8 text-center text-stone-900">Aramıza Katıl</h2>
+                <form id="register-form" class="space-y-5">
+                    <input type="email" id="reg-email" placeholder="E-posta Adresi" required class="w-full p-4 rounded-2xl border border-stone-200 outline-none focus:border-amber-600 transition">
+                    <input type="password" id="reg-password" placeholder="Şifre (En az 6 Karakter)" required minlength="6" class="w-full p-4 rounded-2xl border border-stone-200 outline-none focus:border-amber-600 transition">
+                    <button type="submit" class="w-full py-4 bg-amber-700 text-white rounded-2xl font-bold shadow-lg hover:bg-amber-800 transition">Kayıt Ol</button>
                 </form>
-                <p class="mt-4 text-center text-sm">Zaten üye misiniz? <button onclick="showAuth('login')" class="text-amber-700 font-bold">Giriş Yap</button></p>
+                <button onclick="showAuth('login')" class="w-full mt-6 text-xs text-stone-500 font-bold hover:text-amber-700 transition">Zaten hesabın var mı? Giriş Yap</button>
             </div>
         </div>
     </div>
 
-    <!-- Info/Publish Modalları -->
-    <div id="info-modal" class="fixed inset-0 bg-black/60 z-[110] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-2xl rounded-3xl p-8 relative max-h-[80vh] overflow-y-auto">
-            <button onclick="closeInfo()" class="absolute top-4 right-4 text-gray-400 hover:text-black"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 id="info-title" class="serif text-2xl font-bold mb-4 text-stone-900"></h2>
-            <div id="info-content" class="text-sm text-gray-600 leading-relaxed space-y-4"></div>
-        </div>
-    </div>
-    
-    <div id="publish-modal" class="fixed inset-0 bg-black/60 z-[100] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-2xl rounded-3xl p-8 relative">
-            <h2 class="serif text-3xl font-bold mb-6 text-stone-900">Yeni Makale Yaz</h2>
-            <form id="publish-form" class="space-y-4">
-                <input type="text" id="art-title" placeholder="Makale Başlığı" required class="w-full px-4 py-3 border-b outline-none text-xl font-bold text-stone-800">
-                <select id="art-category" class="w-full px-4 py-2 rounded bg-stone-50 border outline-none font-semibold text-stone-600">
+    <div id="publish-modal" class="fixed inset-0 bg-black/80 z-[300] hidden items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white w-full max-w-3xl rounded-[3rem] p-10 relative shadow-2xl">
+            <h2 class="serif text-3xl font-bold mb-8 text-stone-900">Tarihe Not Düş</h2>
+            <form id="publish-form" class="space-y-6">
+                <input type="text" id="art-title" placeholder="Makale Başlığı" required class="w-full p-4 border-b-2 border-stone-100 text-2xl font-bold outline-none focus:border-amber-600 transition">
+                <select id="art-category" class="w-full p-4 bg-stone-50 rounded-2xl font-bold text-stone-600 outline-none border border-stone-100">
                     <option value="Antik Çağ">Antik Çağ</option>
                     <option value="Orta Çağ">Orta Çağ</option>
                     <option value="Osmanlı">Osmanlı</option>
                     <option value="Modern">Modern</option>
                 </select>
-                <textarea id="art-content" placeholder="Makale içeriği..." required class="w-full h-48 px-4 py-3 rounded bg-stone-50 border outline-none resize-none custom-scrollbar text-stone-700"></textarea>
-                <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="closePublish()" class="text-gray-400 font-bold px-4 hover:text-stone-600">İptal</button>
-                    <button type="submit" class="px-8 py-2 bg-amber-700 text-white rounded-full font-bold hover:bg-amber-800 transition shadow-md">Yayınla</button>
+                <textarea id="art-content" placeholder="Anlatmaya başla..." required class="w-full h-64 p-6 border border-stone-100 rounded-3xl outline-none resize-none bg-stone-50 focus:bg-white transition"></textarea>
+                <div class="flex space-x-4">
+                    <button type="button" onclick="closePublish()" class="flex-1 py-4 text-stone-400 font-bold hover:text-stone-600 transition">Vazgeç</button>
+                    <button type="submit" class="flex-[2] py-4 bg-amber-700 text-white rounded-2xl font-bold shadow-xl hover:bg-amber-800 transition">Yayınla</button>
                 </div>
             </form>
         </div>
@@ -286,296 +234,282 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyAwfEYe0JztVcatqsbI6vUmjizJBaSKpYQ",
             authDomain: "messi-2704f.firebaseapp.com",
             projectId: "messi-2704f",
             storageBucket: "messi-2704f.firebasestorage.app",
             messagingSenderId: "605613457448",
-            appId: "1:605613457448:web:3940784f4070a4693d751d",
-            measurementId: "G-FVL7SN0ZRV"
+            appId: "1:605613457448:web:3940784f4070a4693d751d"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const ADMIN_EMAIL = "yusufberkgenc5758@gmail.com";
         let currentUser = null;
         let allArticles = [];
         let currentReadId = null;
 
-        // Statik Örnek Makaleler (Veritabanı boşsa yüklenecek)
-        const SAMPLE_ARTICLES = [
-            { title: "Sümerlerin Matematik Mirası", content: "Sümerler, günümüzde hala kullandığımız 60'lık sayı sistemini geliştiren ilk medeniyettir. Zaman ölçümü bu mirasa dayanır.", category: "Antik Çağ", author: "admin@history.com" },
-            { title: "Kadeş Antlaşması: İlk Yazılı Belge", content: "MÖ 1259 yılında Hititler ve Mısırlılar arasında imzalanan bu antlaşma, tarihin ilk diplomatik başarısı kabul edilir.", category: "Antik Çağ", author: "admin@history.com" },
-            { title: "Truva Savaşı: Efsane mi Gerçek mi?", content: "Homer'in İlyada'sında anlatılan savaşın arkeolojik kanıtları, Schliemann'ın kazılarıyla büyük tartışma yaratmıştır.", category: "Antik Çağ", author: "admin@history.com" },
-            { title: "Roma Lejyonlarının Disiplini", content: "Roma'nın dünyaya hakim olmasını sağlayan şey sadece asker sayısı değil, katı disiplin ve mühendislik yeteneğiydi.", category: "Antik Çağ", author: "admin@history.com" },
-            { title: "İstanbul'un Fethi ve Orta Çağ'ın Sonu", content: "1453 yılında Fatih Sultan Mehmed'in İstanbul'u fethi, sadece bir şehrin düşüşü değil, bir çağın kapanışıdır.", category: "Osmanlı", author: "admin@history.com" },
-            { title: "Mimar Sinan ve Statik Dehası", content: "Süleymaniye ve Selimiye Camileri, yüzyıllar geçmesine rağmen depremlere meydan okuyan mühendislik harikalarıdır.", category: "Osmanlı", author: "admin@history.com" },
-            { title: "Viyana Kuşatması: Dönüm Noktası", content: "1683 yılında gerçekleşen İkinci Viyana Kuşatması, Osmanlı'nın Avrupa'daki ilerleyişinin durduğu kritik bir andır.", category: "Osmanlı", author: "admin@history.com" },
-            { title: "Lale Devri: Batılılaşma Sancısı", content: "Nevşehirli Damat İbrahim Paşa döneminde başlayan yenilik hareketleri, Osmanlı'nın batıya bakışını değiştirmiştir.", category: "Osmanlı", author: "admin@history.com" },
-            { title: "Magna Carta ve Demokrasinin Doğuşu", content: "1215 yılında İngiltere Kralı'nın yetkilerini sınırlayan bu belge, modern hukuk sistemlerinin temel taşıdır.", category: "Orta Çağ", author: "admin@history.com" },
-            { title: "Haçlı Seferleri'nin Kültürel Etkisi", content: "Doğu ve Batı dünyasının çarpışması, bilim ve sanatın Avrupa'ya taşınmasına büyük ölçüde vesile olmuştur.", category: "Orta Çağ", author: "admin@history.com" },
-            { title: "Kara Ölüm: Veba Salgını", content: "14. yüzyılda Avrupa nüfusunun üçte birini yok eden veba, feodal sistemin çöküşünü hızlandırmıştır.", category: "Orta Çağ", author: "admin@history.com" },
-            { title: "Vikings: Kuzeyin Denizcileri", content: "Vikingler sadece yağmacı değil, Amerika kıtasına Kolomb'dan önce ulaşan usta denizci ve tüccarlardı.", category: "Orta Çağ", author: "admin@history.com" },
-            { title: "Sanayi Devrimi ve Toplumsal Değişim", content: "Buharlı makinelerin keşfiyle başlayan süreç, tarım toplumundan işçi sınıfının doğduğu kentleşmeye geçişi sağladı.", category: "Modern", author: "admin@history.com" },
-            { title: "Fransız İhtilali: Özgürlük Çığlığı", content: "1789'da başlayan ihtilal, milliyetçilik ve laiklik gibi kavramları dünyaya yayan en önemli modern olaydır.", category: "Modern", author: "admin@history.com" },
-            { title: "Birinci Dünya Savaşı'nın Nedenleri", content: "Ferdinand'ın suikastı bir kıvılcımdı ancak sömürgecilik ve bloklaşma büyük felaketin asıl hazırlayıcısıydı.", category: "Modern", author: "admin@history.com" },
-            { title: "Soğuk Savaş ve Uzay Yarışı", content: "ABD ve SSCB arasındaki ideolojik rekabet, insanlığın Ay'a ayak basmasıyla sonuçlanan teknolojik bir yarışa dönüştü.", category: "Modern", author: "admin@history.com" },
-            { title: "Atatürk ve Cumhuriyet İlanı", content: "Kurtuluş Savaşı sonrası modern Türkiye'nin temelleri atılırken, Cumhuriyet en büyük devrim olarak ilan edildi.", category: "Modern", author: "admin@history.com" },
-            { title: "Endülüs Emevileri: Bilim Köprüsü", content: "İspanya'da kurulan bu medeniyet, antik Yunan metinlerini çevirerek Avrupa'nın Rönesans'a girmesini sağladı.", category: "Orta Çağ", author: "admin@history.com" },
-            { title: "Aztekler ve Güneş Takvimi", content: "Mezoamerika medeniyetlerinden biri olan Aztekler, astronomi konusunda hayret verici bir hassasiyete sahipti.", category: "Antik Çağ", author: "admin@history.com" },
-            { title: "Napolyon Savaşları ve Avrupa Haritası", content: "Fransız İmparatoru'nun genişlemesi, monarşilerin sarsılmasına ve yeni ulus-devletlerin doğmasına yol açtı.", category: "Modern", author: "admin@history.com" }
-        ];
-
-        // Notify
-        window.notify = (text, isError = false) => {
+        // BİLDİRİM
+        window.notify = (text) => {
             const notif = document.getElementById('notification');
-            const notifText = document.getElementById('notif-text');
-            notifText.innerText = text;
-            notif.className = isError ? "bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center space-x-2" : "bg-green-600 text-white px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center space-x-2";
+            document.getElementById('notif-text').innerText = text;
             notif.style.display = 'flex';
             setTimeout(() => { notif.style.display = 'none'; }, 3000);
         };
 
-        // Modals
-        window.showAuth = (type) => {
-            document.getElementById('auth-modal').classList.remove('hidden');
-            document.getElementById('auth-modal').classList.add('flex');
-            document.querySelectorAll('.auth-card').forEach(c => c.classList.remove('active'));
-            document.getElementById(`${type}-card`).classList.add('active');
+        // DİL DEĞİŞTİRME (GOOGLE TRANSLATE)
+        window.googleTranslateElementInit = () => {
+            new google.translate.TranslateElement({pageLanguage: 'tr'}, 'google_translate_element');
         };
-        window.closeAuth = () => document.getElementById('auth-modal').classList.add('hidden');
 
-        window.showPublishModal = () => {
-            if(!currentUser) return showAuth('login');
-            document.getElementById('publish-modal').classList.remove('hidden');
-            document.getElementById('publish-modal').classList.add('flex');
+        window.changeLanguage = (lang) => {
+            const el = document.querySelector('.goog-te-combo');
+            if (el) {
+                el.value = lang;
+                el.dispatchEvent(new Event('change'));
+            }
         };
-        window.closePublish = () => document.getElementById('publish-modal').classList.add('hidden');
 
+        // PROFİL SİSTEMİ
         window.showProfileModal = () => {
             if(!currentUser) return;
-            document.getElementById('prof-email').value = currentUser.email;
-            document.getElementById('prof-avatar-preview').innerText = currentUser.email.charAt(0).toUpperCase();
-            document.getElementById('profile-modal').classList.remove('hidden');
-            document.getElementById('profile-modal').classList.add('flex');
+            document.getElementById('prof-display-name').value = currentUser.displayName || "";
+            document.getElementById('prof-avatar-big').innerText = (currentUser.displayName || currentUser.email).charAt(0).toUpperCase();
+            document.getElementById('profile-modal').classList.replace('hidden', 'flex');
         };
-        window.closeProfile = () => document.getElementById('profile-modal').classList.add('hidden');
+        window.closeProfile = () => document.getElementById('profile-modal').classList.replace('flex', 'hidden');
 
-        // Initial Data Check (Seed)
-        const checkAndSeed = async () => {
-            const snap = await getDocs(query(collection(db, "articles"), limit(1)));
-            if (snap.empty) {
-                console.log("Database empty. Seeding samples...");
-                for (const art of SAMPLE_ARTICLES) {
-                    await addDoc(collection(db, "articles"), {
-                        ...art,
-                        likes: [],
-                        createdAt: Date.now()
-                    });
-                }
-                notify("Örnek makaleler yüklendi.");
-            }
+        window.updateProfileData = async () => {
+            const name = document.getElementById('prof-display-name').value.trim();
+            if(!name) return;
+            try {
+                await updateProfile(auth.currentUser, { displayName: name });
+                notify("Profiliniz başarıyla güncellendi!");
+                closeProfile();
+            } catch (e) { notify("Hata oluştu!"); }
         };
 
-        // Render Logic
-        const renderArticles = (list) => {
-            const cont = document.getElementById('articles-container');
-            cont.innerHTML = list.length ? "" : "<div class='text-center py-20'><i class='fa-solid fa-folder-open text-4xl text-stone-300 mb-4 block'></i><p class='text-stone-400'>Makale bulunamadı.</p></div>";
+        // BEĞENİ SİSTEMİ
+        window.toggleLike = async (id, isLiked) => {
+            if(!currentUser) { notify("Beğenmek için giriş yapmalısınız!"); return; }
+            const ref = doc(db, "articles", id);
+            try {
+                if(isLiked) await updateDoc(ref, { likes: arrayRemove(currentUser.uid) });
+                else await updateDoc(ref, { likes: arrayUnion(currentUser.uid) });
+                // renderArticles onSnapshot ile otomatik tetiklenecek
+            } catch (e) { console.error(e); }
+        };
+
+        // YORUM SİSTEMİ (INDEX HATASI GİDERİLDİ)
+        const syncComments = (articleId) => {
+            // Index hatası almamak için orderBy'ı sorgudan kaldırdık, JS tarafında sıralayacağız
+            const q = query(collection(db, "comments"), where("articleId", "==", articleId));
             
-            list.forEach(a => {
-                const art = document.createElement('article');
-                art.className = "bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-stone-100 hover:border-amber-200 transition cursor-pointer group";
-                art.onclick = () => openRead(a.id);
-                art.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-[10px] uppercase bg-amber-50 text-amber-700 px-3 py-1 rounded-full font-bold border border-amber-100">${a.category}</span>
-                        <span class="text-[10px] text-stone-400">${new Date(a.createdAt).toLocaleDateString('tr-TR')}</span>
-                    </div>
-                    <h2 class="serif text-2xl font-bold mb-3 group-hover:text-amber-700 transition">${a.title}</h2>
-                    <p class="text-stone-600 line-clamp-2 text-sm leading-relaxed">${a.content}</p>
-                    <div class="mt-6 pt-6 border-t border-stone-50 flex items-center justify-between text-xs text-stone-400 font-bold">
-                        <span class="flex items-center"><i class="fa-solid fa-user-nib mr-2 opacity-50"></i> ${a.author.split('@')[0]}</span>
-                        <div class="flex items-center space-x-4 text-amber-700">
-                            <span><i class="fa-regular fa-heart"></i> ${a.likes?.length || 0}</span>
-                            <span class="hidden sm:inline">Okumaya devam et <i class="fa-solid fa-chevron-right ml-1"></i></span>
-                        </div>
-                    </div>
-                `;
-                cont.appendChild(art);
-            });
-        };
-
-        // Realtime Listener
-        onSnapshot(query(collection(db, "articles"), orderBy("createdAt", "desc")), (snap) => {
-            allArticles = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderArticles(allArticles);
-        });
-
-        // Auth Listener
-        onAuthStateChanged(auth, (u) => {
-            currentUser = u;
-            document.getElementById('nav-guest').classList.toggle('hidden', !!u);
-            document.getElementById('nav-user').classList.toggle('hidden', !u);
-            if(u) document.getElementById('user-avatar').innerText = u.email.charAt(0).toUpperCase();
-        });
-
-        // Methods
-        window.openRead = (id) => {
-            currentReadId = id;
-            const art = allArticles.find(a => a.id === id);
-            if(!art) return;
-            const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
-            const isOwner = currentUser && currentUser.email === art.author;
-            const isLiked = currentUser && art.likes?.includes(currentUser.uid);
-
-            document.getElementById('read-content-area').innerHTML = `
-                <div class="mb-10">
-                    <span class="text-xs uppercase bg-amber-50 text-amber-700 px-4 py-1 rounded-full font-bold border border-amber-100">${art.category}</span>
-                    <h1 class="serif text-4xl md:text-5xl font-bold mt-6 text-stone-900 leading-tight">${art.title}</h1>
-                    <div class="flex items-center space-x-6 mt-6 text-sm text-stone-500 border-b pb-6">
-                        <span class="font-bold text-stone-800">Yazar: ${art.author.split('@')[0]}</span>
-                        <span>•</span>
-                        <span>${new Date(art.createdAt).toLocaleDateString('tr-TR')}</span>
-                        ${(isAdmin || isOwner) ? `<button onclick="window.deleteArticle('${art.id}')" class="text-red-500 hover:text-red-700 ml-auto font-bold flex items-center"><i class="fa-solid fa-trash mr-2"></i> Sil</button>` : ''}
-                    </div>
-                </div>
-                <div class="text-stone-700 leading-loose text-lg serif whitespace-pre-wrap">${art.content}</div>
-                <div class="mt-10 flex items-center space-x-4">
-                    <button onclick="window.toggleLike('${art.id}', ${isLiked})" class="flex items-center space-x-2 px-8 py-3 rounded-full border transition-all ${isLiked ? 'bg-red-50 border-red-200 text-red-500' : 'bg-stone-50 border-stone-200 text-stone-400 hover:bg-stone-100'}">
-                        <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
-                        <span class="font-bold">${art.likes?.length || 0} Beğeni</span>
-                    </button>
-                </div>
-            `;
-            document.getElementById('read-modal').classList.remove('hidden');
-            document.body.classList.add('modal-active');
-            syncComments(id);
-
-            if(currentUser) {
-                document.getElementById('comment-form-area').classList.remove('hidden');
-                document.getElementById('comment-login-msg').classList.add('hidden');
-            } else {
-                document.getElementById('comment-form-area').classList.add('hidden');
-                document.getElementById('comment-login-msg').classList.remove('hidden');
-            }
-        };
-
-        window.closeRead = () => {
-            document.getElementById('read-modal').classList.add('hidden');
-            document.body.classList.remove('modal-active');
-        };
-
-        const syncComments = (aid) => {
-            const q = query(collection(db, "comments"), where("articleId", "==", aid), orderBy("createdAt", "asc"));
             onSnapshot(q, (snap) => {
                 const list = document.getElementById('comment-list');
-                list.innerHTML = snap.docs.length ? "" : "<p class='text-xs text-stone-400 italic'>Henüz yorum yok.</p>";
-                snap.docs.forEach(d => {
-                    const c = d.data();
-                    const div = document.createElement('div');
-                    div.className = "p-4 bg-stone-50 rounded-xl border border-stone-100 mb-2";
-                    div.innerHTML = `<div class="flex justify-between items-center mb-1"><span class="font-bold text-amber-800 text-xs">${c.userEmail.split('@')[0]}</span><span class="text-[10px] text-stone-400">${new Date(c.createdAt).toLocaleDateString('tr-TR')}</span></div><p class="text-stone-700">${c.text}</p>`;
-                    list.appendChild(div);
+                const comments = [];
+                snap.forEach(d => comments.push(d.data()));
+                
+                // JavaScript ile tarihe göre sıralama (En yeni en üstte)
+                comments.sort((a, b) => b.createdAt - a.createdAt);
+
+                list.innerHTML = comments.length ? "" : "<p class='text-stone-400 italic text-sm'>Henüz yorum yapılmamış. İlk yorumu sen yap!</p>";
+                comments.forEach(c => {
+                    list.innerHTML += `
+                        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm transition hover:shadow-md">
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="h-8 w-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs uppercase">${c.authorName.charAt(0)}</div>
+                                    <span class="font-bold text-stone-800 text-sm">${c.authorName}</span>
+                                </div>
+                                <span class="text-[10px] text-stone-400 font-bold uppercase tracking-tighter">${new Date(c.createdAt).toLocaleDateString('tr-TR')}</span>
+                            </div>
+                            <p class="text-stone-600 text-sm leading-relaxed">${c.text}</p>
+                        </div>`;
                 });
             });
         };
 
-        // Actions
+        window.addComment = async () => {
+            const input = document.getElementById('comment-input');
+            const text = input.value.trim();
+            if(!text || !currentUser) return;
+            try {
+                await addDoc(collection(db, "comments"), {
+                    articleId: currentReadId,
+                    text: text,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.displayName || currentUser.email.split('@')[0],
+                    createdAt: Date.now()
+                });
+                input.value = "";
+                notify("Yorumunuz tarihe not düşüldü!");
+            } catch (e) { notify("Yorum gönderilemedi!"); }
+        };
+
+        // MAKALE GÖSTERİMİ
+        window.openRead = (id) => {
+            currentReadId = id;
+            const art = allArticles.find(a => a.id === id);
+            if(!art) return;
+            
+            const isLiked = currentUser && art.likes?.includes(currentUser.uid);
+            
+            document.getElementById('read-content-area').innerHTML = `
+                <div class="mb-12">
+                    <span class="text-xs uppercase bg-amber-100 text-amber-700 px-5 py-2 rounded-full font-black tracking-widest border border-amber-200">${art.category}</span>
+                    <h1 class="serif text-4xl md:text-6xl font-bold mt-8 mb-10 text-stone-900 leading-tight">${art.title}</h1>
+                    <div class="flex items-center space-x-5 mb-12 bg-stone-50 p-6 rounded-3xl border border-stone-100">
+                        <div class="h-12 w-12 rounded-full bg-amber-700 flex items-center justify-center text-white font-bold text-xl uppercase">${art.author.charAt(0)}</div>
+                        <div>
+                            <p class="font-black text-stone-900 text-sm uppercase tracking-wide">${art.author.split('@')[0]}</p>
+                            <p class="text-[10px] text-stone-400 font-bold uppercase tracking-tighter">${new Date(art.createdAt).toLocaleDateString('tr-TR')}</p>
+                        </div>
+                    </div>
+                    <div class="text-stone-800 leading-[2.2] text-xl serif whitespace-pre-wrap first-letter:text-5xl first-letter:font-bold first-letter:text-amber-800 first-letter:mr-3 first-letter:float-left">${art.content}</div>
+                    <div class="mt-16 flex items-center">
+                        <button onclick="window.toggleLike('${art.id}', ${isLiked})" class="flex items-center space-x-3 px-10 py-4 rounded-full border-2 transition ${isLiked ? 'bg-red-50 border-red-200 text-red-600 shadow-inner' : 'bg-stone-50 border-stone-100 text-stone-400 hover:bg-stone-100'}">
+                            <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart text-2xl"></i>
+                            <span class="font-black text-sm uppercase tracking-widest">${art.likes?.length || 0} Beğeni</span>
+                        </button>
+                    </div>
+                </div>`;
+            
+            document.getElementById('read-modal').classList.replace('hidden', 'flex');
+            syncComments(id);
+            if(currentUser) document.getElementById('comment-form-area').classList.remove('hidden');
+            else document.getElementById('comment-form-area').classList.add('hidden');
+        };
+
+        window.closeRead = () => {
+            document.getElementById('read-modal').classList.replace('flex', 'hidden');
+            currentReadId = null;
+        };
+
+        // AUTH
+        onAuthStateChanged(auth, (u) => {
+            currentUser = u;
+            document.getElementById('nav-guest').classList.toggle('hidden', !!u);
+            document.getElementById('nav-user').classList.toggle('hidden', !u);
+            if(u) {
+                const av = document.getElementById('user-avatar');
+                av.innerText = (u.displayName || u.email).charAt(0).toUpperCase();
+            }
+        });
+
+        window.showAuth = (t) => {
+            document.getElementById('auth-modal').classList.replace('hidden', 'flex');
+            document.querySelectorAll('.auth-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(`${t}-card`).classList.add('active');
+        };
+        window.closeAuth = () => document.getElementById('auth-modal').classList.replace('flex', 'hidden');
+
+        window.logout = () => { signOut(auth); notify("Başarıyla çıkış yapıldı."); };
+
+        window.showPublishModal = () => document.getElementById('publish-modal').classList.replace('hidden', 'flex');
+        window.closePublish = () => document.getElementById('publish-modal').classList.replace('flex', 'hidden');
+
+        // VERİ AKIŞI
+        onSnapshot(query(collection(db, "articles"), orderBy("createdAt", "desc")), (snap) => {
+            allArticles = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderArticles(allArticles);
+            // Modal açıksa içeriği (beğeni sayısını vs) güncelle
+            if(currentReadId) {
+                const openArt = allArticles.find(a => a.id === currentReadId);
+                if(openArt) {
+                    const isLiked = currentUser && openArt.likes?.includes(currentUser.uid);
+                    // Sadece beğeni butonunu ve sayısını güncelle (tüm modalı değil, metin kaybolmasın)
+                    const btn = document.querySelector('#read-modal button[onclick*="toggleLike"]');
+                    if(btn) {
+                        btn.className = `flex items-center space-x-3 px-10 py-4 rounded-full border-2 transition ${isLiked ? 'bg-red-50 border-red-200 text-red-600 shadow-inner' : 'bg-stone-50 border-stone-100 text-stone-400 hover:bg-stone-100'}`;
+                        btn.innerHTML = `<i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart text-2xl"></i><span class="font-black text-sm uppercase tracking-widest">${openArt.likes?.length || 0} Beğeni</span>`;
+                        btn.setAttribute('onclick', `window.toggleLike('${openArt.id}', ${isLiked})`);
+                    }
+                }
+            }
+        });
+
+        const renderArticles = (list) => {
+            const cont = document.getElementById('articles-container');
+            cont.innerHTML = list.length ? "" : "<div class='py-20 text-center text-stone-400 font-serif italic'>Henüz makale bulunmuyor...</div>";
+            list.forEach(a => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-8 md:p-10 rounded-[2.5rem] shadow-sm border border-stone-100 hover:shadow-2xl hover:border-amber-200 transition-all duration-500 cursor-pointer group relative overflow-hidden";
+                card.onclick = () => openRead(a.id);
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-8">
+                        <span class="text-[10px] uppercase bg-amber-50 text-amber-700 px-4 py-1.5 rounded-full font-black tracking-widest border border-amber-100">${a.category}</span>
+                        <span class="text-[10px] text-stone-400 font-bold tracking-widest uppercase">${new Date(a.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <h2 class="serif text-3xl font-bold mb-5 group-hover:text-amber-800 transition-colors leading-tight">${a.title}</h2>
+                    <p class="text-stone-500 line-clamp-2 text-sm leading-relaxed mb-8 font-medium">${a.content}</p>
+                    <div class="flex justify-between items-center border-t border-stone-50 pt-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="h-9 w-9 rounded-full bg-stone-100 flex items-center justify-center text-xs font-black text-amber-700 uppercase shadow-inner">${a.author.charAt(0)}</div>
+                            <span class="text-[10px] font-black text-stone-800 uppercase tracking-widest">${a.author.split('@')[0]}</span>
+                        </div>
+                        <div class="flex items-center space-x-5 text-amber-700 font-black text-[10px] uppercase tracking-widest">
+                            <span class="flex items-center"><i class="fa-solid fa-heart mr-2 opacity-50"></i> ${a.likes?.length || 0}</span>
+                            <span class="group-hover:translate-x-2 transition-transform duration-300">İncele <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                        </div>
+                    </div>`;
+                cont.appendChild(card);
+            });
+        };
+
+        // FORMLAR
         document.getElementById('login-form').onsubmit = async (e) => {
             e.preventDefault();
             try {
                 await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
-                closeAuth(); notify("Hoş geldiniz!");
-            } catch(err) { notify("Hata: " + err.message, true); }
+                closeAuth();
+                notify("Hoş geldiniz, tarih sizi bekliyor!");
+            } catch(e) { notify("E-posta veya şifre hatalı!"); }
         };
 
         document.getElementById('register-form').onsubmit = async (e) => {
             e.preventDefault();
             try {
                 await createUserWithEmailAndPassword(auth, document.getElementById('reg-email').value, document.getElementById('reg-password').value);
-                closeAuth(); notify("Hesap başarıyla oluşturuldu.");
-            } catch(err) { notify("Hata: " + err.message, true); }
+                closeAuth();
+                notify("Kütüphanemize hoş geldiniz!");
+            } catch(e) { notify("Kayıt sırasında bir hata oluştu!"); }
         };
 
         document.getElementById('publish-form').onsubmit = async (e) => {
             e.preventDefault();
+            if(!currentUser) return;
             try {
                 await addDoc(collection(db, "articles"), {
                     title: document.getElementById('art-title').value,
-                    content: document.getElementById('art-content').value,
                     category: document.getElementById('art-category').value,
+                    content: document.getElementById('art-content').value,
                     author: currentUser.email,
                     likes: [],
                     createdAt: Date.now()
                 });
-                closePublish(); notify("Makale yayına alındı.");
-                document.getElementById('publish-form').reset();
-            } catch(err) { notify("Yayınlanırken hata oluştu.", true); }
-        };
-
-        document.getElementById('submit-comment-btn').onclick = async () => {
-            const val = document.getElementById('comment-input').value.trim();
-            if(!val || !currentUser) return;
-            await addDoc(collection(db, "comments"), {
-                articleId: currentReadId, userEmail: currentUser.email, text: val, createdAt: Date.now()
-            });
-            document.getElementById('comment-input').value = "";
-            notify("Yorum eklendi.");
-        };
-
-        window.toggleLike = async (id, isLiked) => {
-            if(!currentUser) return showAuth('login');
-            await updateDoc(doc(db, "articles", id), {
-                likes: isLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid)
-            });
-        };
-
-        window.deleteArticle = async (id) => {
-            if(!confirm("Bu makaleyi kalıcı olarak silmek istiyor musunuz?")) return;
-            await deleteDoc(doc(db, "articles", id));
-            notify("Makale silindi."); closeRead();
-        };
-
-        window.handleSearch = () => {
-            const val = document.getElementById('search-input').value.toLowerCase();
-            renderArticles(allArticles.filter(a => a.title.toLowerCase().includes(val) || a.content.toLowerCase().includes(val)));
+                closePublish();
+                notify("Makaleniz başarıyla arşivlendi!");
+                e.target.reset();
+            } catch(e) { notify("Yayınlanırken bir hata oluştu!"); }
         };
 
         window.filterCategory = (cat) => {
             if(cat === 'all') renderArticles(allArticles);
             else renderArticles(allArticles.filter(a => a.category === cat));
-            notify(`Kategori filtrelendi: ${cat}`);
         };
 
-        window.logout = () => { signOut(auth); notify("Başarıyla çıkış yaptınız."); closeProfile(); };
-        
-        window.changeLanguage = (lang) => {
-             notify("Dil değiştirme yakında eklenecek.");
+        window.handleSearch = () => {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            renderArticles(allArticles.filter(a => a.title.toLowerCase().includes(q) || a.content.toLowerCase().includes(q)));
         };
-
-        window.showInfo = (type) => {
-            const modal = document.getElementById('info-modal');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            const infos = {
-                kvkk: { t: "KVKK Aydınlatma", c: "Makale-i Tarih, kullanıcı verilerini gizli tutar. E-postanız sadece oturum yönetimi için kullanılır." },
-                vizyon: { t: "Vizyonumuz", c: "Amacımız, tarihin bilimsel ve edebi derinliğini modern web teknolojileriyle buluşturmaktır." },
-                yazarlik: { t: "Yazarlık Şartları", c: "Her kullanıcı makale yazabilir ancak içeriğin tarihi dürüstlük ve saygı çerçevesinde olması şarttır." }
-            };
-            document.getElementById('info-title').innerText = infos[type].t;
-            document.getElementById('info-content').innerText = infos[type].c;
-        };
-        window.closeInfo = () => document.getElementById('info-modal').classList.add('hidden');
-
-        // Start Seed Process
-        checkAndSeed();
 
     </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
